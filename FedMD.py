@@ -82,9 +82,9 @@ class FedMD():
                          validation_data=[private_test_data["X"], private_test_data["y"]],
                          callbacks=[EarlyStopping(monitor='acc', min_delta=0.001, patience=5)])
 
-            self.upper_bounds.append(model_ub.history.history["val_accuracy"][-1])
-            self.pooled_train_result.append({"val_acc": model_ub.history.history["val_accuracy"],
-                                             "acc": model_ub.history.history["accuracy"]})
+            self.upper_bounds.append(model_ub.history.history["val_acc"][-1])
+            self.pooled_train_result.append({"val_acc": model_ub.history.history["val_acc"],
+                                             "acc": model_ub.history.history["acc"]})
 
             del model_ub
         print("the upper bounds are:", self.upper_bounds)
