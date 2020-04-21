@@ -7,7 +7,7 @@ import sys
 from tensorflow.keras.models import load_model
 
 from FedMD import FedMD
-from data_utils import load_MNIST_data, load_EMNIST_data, generate_bal_private_data, \
+from load_data import load_MNIST_data, load_EMNIST_data, generate_bal_private_data, \
     generate_partial_data
 
 
