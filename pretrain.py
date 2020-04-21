@@ -15,7 +15,7 @@ def parseArg():
     # metavar - 在使用方法消息中使用的参数值示例。
     parser.add_argument('-conf', metavar='conf.file', nargs=1,
                         help='Please choose the config file for training')
-    conf_file = os.path.abspath("conf/pretrain_MNIST_conf.json")
+    conf_file = os.path.abspath("conf/pre_train.json")
 
     if len(sys.argv) > 1:
         args = parser.parse_args(sys.argv[1:])

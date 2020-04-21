@@ -18,7 +18,7 @@ def parseArg():
                         help='the config file for FedMD.'
                         )
 
-    conf_file = os.path.abspath("conf/EMNIST_balance_conf.json")
+    conf_file = os.path.abspath("conf/ac_train.json")
 
     if len(sys.argv) > 1:
         args = parser.parse_args(sys.argv[1:])
