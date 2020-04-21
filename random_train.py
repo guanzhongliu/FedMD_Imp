@@ -6,7 +6,7 @@ import sys
 
 from tensorflow.keras.models import load_model
 
-from FedMD import Fed_plus
+from Fed_random import FedMD_random
 from load_data import load_MNIST_data, load_EMNIST_data, generate_bal_private_data, \
     generate_partial_data
 
@@ -44,7 +44,7 @@ if __name__ == "__main__":
         N_logits_matching_round = conf_dict["N_logits_matching_round"]
         logits_matching_batchsize = conf_dict["logits_matching_batchsize"]
         model_saved_dir = conf_dict["model_saved_dir"]
-
+        random_parties = conf_dict["Random_parties"]
         result_save_dir = conf_dict["result_save_dir"]
 
     del conf_dict, conf_file
@@ -81,17 +81,18 @@ if __name__ == "__main__":
             tmp = load_model(os.path.join(dpath, name))
             parties.append(tmp)
 
-    fedmd = Fed_plus(parties,
-                  public_dataset=public_dataset,
-                  private_data=private_data,
-                  total_private_data=total_private_data,
-                  private_test_data=private_test_data,
-                  N_rounds=N_rounds,
-                  N_alignment=N_alignment,
-                  N_logits_matching_round=N_logits_matching_round,
-                  logits_matching_batchsize=logits_matching_batchsize,
-                  N_private_training_round=N_private_training_round,
-                  private_training_batchsize=private_training_batchsize)
+    fedmd = FedMD_random(parties,
+                         public_dataset=public_dataset,
+                         private_data=private_data,
+                         total_private_data=total_private_data,
+                         private_test_data=private_test_data,
+                         N_rounds=N_rounds,
+                         N_alignment=N_alignment,
+                         N_logits_matching_round=N_logits_matching_round,
+                         logits_matching_batchsize=logits_matching_batchsize,
+                         N_private_training_round=N_private_training_round,
+                         private_training_batchsize=private_training_batchsize,
+                         random_parties=random_parties)
 
     initialization_result = fedmd.init_result
     pooled_train_result = fedmd.pooled_train_result

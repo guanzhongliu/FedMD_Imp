@@ -8,13 +8,14 @@ from load_data import generate_alignment_data
 import random
 
 
-class FedMD_plus():
+class FedMD_random():
     def __init__(self, parties, public_dataset,
                  private_data, total_private_data,
                  private_test_data, N_alignment,
                  N_rounds,
                  N_logits_matching_round, logits_matching_batchsize,
-                 N_private_training_round, private_training_batchsize):
+                 N_private_training_round, private_training_batchsize,
+                 random_parties):
 
         self.N_parties = len(parties)
         self.public_dataset = public_dataset
@@ -27,7 +28,7 @@ class FedMD_plus():
         self.logits_matching_batchsize = logits_matching_batchsize
         self.N_private_training_round = N_private_training_round
         self.private_training_batchsize = private_training_batchsize
-
+        self.random_parties = random_parties
         self.collaborative_parties = []
         self.init_result = []
 
@@ -106,13 +107,13 @@ class FedMD_plus():
             # update logits
             logits = 0
 
-            slice = random.sample(self.collaborative_parties, 8)
+            slice = random.sample(self.collaborative_parties, (self.N_parties -2))
 
             for d in slice:
                 d["model_logits"].set_weights(d["model_weights"])
                 logits += d["model_logits"].predict(alignment_data["X"], verbose=0)
 
-            logits /= self.N_parties
+            logits /= (self.N_parties -2)
 
             # test performance
             print("test performance ... ")
