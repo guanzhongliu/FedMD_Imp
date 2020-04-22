@@ -5,17 +5,15 @@ from tensorflow.keras.models import clone_model
 
 from Neural_Networks import remove_last_layer
 from load_data import generate_alignment_data
-import random
 
 
-class FedMD_random():
+class FedMD_simu():
     def __init__(self, parties, public_dataset,
                  private_data, total_private_data,
                  private_test_data, N_alignment,
                  N_rounds,
                  N_logits_matching_round, logits_matching_batchsize,
-                 N_private_training_round, private_training_batchsize,
-                 random_parties):
+                 N_private_training_round, private_training_batchsize):
 
         self.N_parties = len(parties)
         self.public_dataset = public_dataset
@@ -28,7 +26,7 @@ class FedMD_random():
         self.logits_matching_batchsize = logits_matching_batchsize
         self.N_private_training_round = N_private_training_round
         self.private_training_batchsize = private_training_batchsize
-        self.random_parties = random_parties
+
         self.collaborative_parties = []
         self.init_result = []
 
@@ -106,14 +104,23 @@ class FedMD_random():
             print("update logits ... ")
             # update logits
             logits = 0
-
-            slice = random.sample(self.collaborative_parties, self.random_parties)
-
-            for d in slice:
+            for d in self.collaborative_parties:
                 d["model_logits"].set_weights(d["model_weights"])
                 logits += d["model_logits"].predict(alignment_data["X"], verbose=0)
 
-            logits /= self.random_parties
+            logits /= self.N_parties
+
+            cosine_simu = []
+            for v in self.collaborative_parties:
+                num = float(v["model_logits"].predict(alignment_data["X"], verbose=0) * logits.T)
+                denom = np.linalg.norm(logits) * np.linalg.norm(v["model_logits"].predict(alignment_data["X"], verbose=0))
+                cos = num / denom
+                cosine_simu.append(0.5 + 0.5 * cos)
+            x = np.array(cosine_simu)
+            x = (x - np.mean(x)) / np.std(x, ddof=1)
+            logits = 0
+            for i in range(self.N_parties):
+                logits += self.collaborative_parties[i]["model_logits"].predict(alignment_data["X"], verbose=0) * x[i]
 
             # test performance
             print("test performance ... ")

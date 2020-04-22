@@ -17,6 +17,10 @@ The origin implementation of FedMD training
 
 Select stochastic batches of models to calculate consensus
 
+### `simu_train.py`&`Fed_simu.py`
+
+Use cosine similarity function to calculate consensus
+
 ## How to run
 
 Run the pre_train for instance
