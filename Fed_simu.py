@@ -112,12 +112,15 @@ class FedMD_simu():
 
             cosine_simu = []
             for v in self.collaborative_parties:
-                num = float(v["model_logits"].predict(alignment_data["X"], verbose=0) * logits.T)
+                n = np.multiply(logits, v["model_logits"].predict(alignment_data["X"], verbose=0))
                 denom = np.linalg.norm(logits) * np.linalg.norm(v["model_logits"].predict(alignment_data["X"], verbose=0))
+                num = np.sum(n)
                 cos = num / denom
                 cosine_simu.append(0.5 + 0.5 * cos)
             x = np.array(cosine_simu)
-            x = (x - np.mean(x)) / np.std(x, ddof=1)
+
+            x = np.exp(x) / np.sum(np.exp(x), axis=0)
+
             logits = 0
             for i in range(self.N_parties):
                 logits += self.collaborative_parties[i]["model_logits"].predict(alignment_data["X"], verbose=0) * x[i]
