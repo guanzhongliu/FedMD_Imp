@@ -15,7 +15,7 @@ class FedMD_random():
                  N_rounds,
                  N_logits_matching_round, logits_matching_batchsize,
                  N_private_training_round, private_training_batchsize,
-                 random_parties):
+                 random_parties, interference):
 
         self.N_parties = len(parties)
         self.public_dataset = public_dataset
@@ -31,6 +31,7 @@ class FedMD_random():
         self.random_parties = random_parties
         self.collaborative_parties = []
         self.init_result = []
+        self.interference = interference
 
         print("start model initialization: ")
         for i in range(self.N_parties):
@@ -113,7 +114,9 @@ class FedMD_random():
                 d["model_logits"].set_weights(d["model_weights"])
                 logits += d["model_logits"].predict(alignment_data["X"], verbose=0)
 
-            logits /= self.random_parties
+
+
+            logits /= self.random_parties+self.interference
 
             # test performance
             print("test performance ... ")

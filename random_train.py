@@ -46,6 +46,7 @@ if __name__ == "__main__":
         model_saved_dir = conf_dict["model_saved_dir"]
         random_parties = conf_dict["Random_parties"]
         result_save_dir = conf_dict["result_save_dir"]
+        interference = conf_dict["interference"]
 
     del conf_dict, conf_file
 
@@ -92,7 +93,7 @@ if __name__ == "__main__":
                          logits_matching_batchsize=logits_matching_batchsize,
                          N_private_training_round=N_private_training_round,
                          private_training_batchsize=private_training_batchsize,
-                         random_parties=random_parties)
+                         random_parties=random_parties,interference=interference)
 
     initialization_result = fedmd.init_result
     pooled_train_result = fedmd.pooled_train_result

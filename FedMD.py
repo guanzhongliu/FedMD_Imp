@@ -13,7 +13,7 @@ class FedMD():
                  private_test_data, N_alignment,
                  N_rounds,
                  N_logits_matching_round, logits_matching_batchsize,
-                 N_private_training_round, private_training_batchsize):
+                 N_private_training_round, private_training_batchsize, interference):
 
         self.N_parties = len(parties)
         self.public_dataset = public_dataset
@@ -29,6 +29,7 @@ class FedMD():
 
         self.collaborative_parties = []
         self.init_result = []
+        self.interference = interference
 
         print("start model initialization: ")
         for i in range(self.N_parties):

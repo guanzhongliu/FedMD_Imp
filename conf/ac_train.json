@@ -12,5 +12,6 @@
     "logits_matching_batchsize": 128, 
     "EMNIST_dir": "./dataset/emnist-letters.mat",
     "model_saved_dir": "./pretrained_from_MNIST/",
-    "result_save_dir": "./FEMNIST_balanced/"
+    "result_save_dir": "./FEMNIST_balanced/",
+    "interference": 0
 }
