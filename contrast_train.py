@@ -150,9 +150,9 @@ if __name__ == "__main__":
 
 
     print("cosine_results:")
-    for i in collaboration_performance_sim:
-        print(i[-1])
+    for i in range(N_parties):
+        print(collaboration_performance_sim[i][-1])
 
     print("normal_results:")
-    for i in collaboration_performance:
-        print(i[-1])
+    for i in range(N_parties):
+        print(collaboration_performance[i][-1])
