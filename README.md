@@ -5,19 +5,19 @@ Based on Tensorflow 2.0 and Python 3.7
 
 ## Introduction
 
-### `pretrain.py`
+##### pretrain.py
 
 Pretrain models with public data and their own private data
 
-### `ac_train.py` & `FedMD.py`
+##### ac_train.py & FedMD.py
 
 The origin implementation of FedMD training
 
-### `random_train.py` & `Fed_random.py`
+##### random_train.py & Fed_random.py
 
 Select stochastic batches of models to calculate consensus
 
-### `simu_train.py`&`Fed_simu.py`
+##### simu_train.py & Fed_simu.py
 
 Use cosine similarity function to calculate consensus
 
