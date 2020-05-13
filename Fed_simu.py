@@ -81,7 +81,7 @@ class FedMD_simu():
             model_ub.fit(total_private_data["X"], total_private_data["y"],
                          batch_size=32, epochs=50, shuffle=True, verbose=1,
                          validation_data=[private_test_data["X"], private_test_data["y"]],
-                         rcallbacks=[EarlyStopping(monitor='acc', min_delta=0.001, patience=5)])
+                         callbacks=[EarlyStopping(monitor='acc', min_delta=0.001, patience=5)])
 
             self.upper_bounds.append(model_ub.history.history["val_acc"][-1])
             self.pooled_train_result.append({"val_acc": model_ub.history.history["val_acc"],
