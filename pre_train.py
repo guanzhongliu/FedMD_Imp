@@ -84,7 +84,8 @@ def train_models(models, X_train, y_train, X_test, y_test,
 
     if is_show:
         print("pre-train accuracy: ")
-        print(resulting_val_acc)
+        for mm in resulting_val_acc:
+            print(mm)
 
     return record_result
 

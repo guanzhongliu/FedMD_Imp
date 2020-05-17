@@ -88,7 +88,9 @@ class FedMD_simu():
                                              "acc": model_ub.history.history["acc"]})
 
             del model_ub
-        print("the upper bounds are:", self.upper_bounds)
+        print("the upper bounds are:")
+        for i in self.upper_bounds:
+            print(i)
 
     def collaborative_training(self):
         # start collaborating training
@@ -114,7 +116,8 @@ class FedMD_simu():
             cosine_simu = []
             for v in self.collaborative_parties:
                 n = np.multiply(logits, v["model_logits"].predict(alignment_data["X"], verbose=0))
-                denom = np.linalg.norm(logits) * np.linalg.norm(v["model_logits"].predict(alignment_data["X"], verbose=0))
+                denom = np.linalg.norm(logits) * np.linalg.norm(
+                    v["model_logits"].predict(alignment_data["X"], verbose=0))
                 num = np.sum(n)
                 cos = num / denom
                 cosine_simu.append(0.5 + 0.5 * cos)
@@ -170,4 +173,7 @@ class FedMD_simu():
             # END FOR LOOP
 
         # END WHILE LOOP
+        print("the upper bounds are:")
+        for i in self.upper_bounds:
+            print(i)
         return collaboration_performance

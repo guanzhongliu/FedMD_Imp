@@ -88,7 +88,9 @@ class FedMD():
                                              "acc": model_ub.history.history["acc"]})
 
             del model_ub
-        print("the upper bounds are:", self.upper_bounds)
+        print("the upper bounds are:")
+        for i in self.upper_bounds:
+            print(i)
 
     def collaborative_training(self):
         # start collaborating training
@@ -155,4 +157,7 @@ class FedMD():
             # END FOR LOOP
 
         # END WHILE LOOP
+        print("the upper bounds are:")
+        for i in self.upper_bounds:
+            print(i)
         return collaboration_performance
