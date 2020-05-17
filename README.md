@@ -1,5 +1,5 @@
-# FedMD_practice
-An implementation of FedMD: Heterogenous Federated Learning via Model Distillation
+# FedMD_Imp
+Try to improve the performance of FedMD
 
 Based on Tensorflow 2.0 and Python 3.7
 
@@ -20,6 +20,10 @@ Select stochastic batches of models to calculate consensus
 ##### simu_train.py & Fed_simu.py
 
 Use cosine similarity function to calculate consensus
+
+##### contrast_train.py
+
+Compare the performance of two methods
 
 ## How to run
 
