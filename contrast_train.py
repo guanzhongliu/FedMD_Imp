@@ -8,6 +8,7 @@ from tensorflow.keras.models import load_model
 
 from Fed_simu import FedMD_simu
 from FedMD import FedMD
+from FedMD_own import FedMD_own
 from load_data import load_MNIST_data, load_EMNIST_data, generate_bal_private_data, \
     generate_partial_data
 
@@ -148,6 +149,42 @@ if __name__ == "__main__":
     with open(os.path.join(save_dir_path, 'col_performance.pkl'), 'wb') as f:
         pickle.dump(collaboration_performance, f, protocol=pickle.HIGHEST_PROTOCOL)
 
+    fedmd_own = FedMD_own(parties,
+                  public_dataset=public_dataset,
+                  private_data=private_data,
+                  total_private_data=total_private_data,
+                  private_test_data=private_test_data,
+                  N_rounds=N_rounds,
+                  N_alignment=N_alignment,
+                  N_logits_matching_round=N_logits_matching_round,
+                  logits_matching_batchsize=logits_matching_batchsize,
+                  N_private_training_round=N_private_training_round,
+                  private_training_batchsize=private_training_batchsize, interference=interference)
+
+    initialization_result = fedmd_own.init_result
+    pooled_train_result = fedmd_own.pooled_train_result
+
+    collaboration_performance_own = fedmd_own.collaborative_training()
+
+    if result_save_dir is not None:
+        save_dir_path = os.path.abspath(result_save_dir)
+        # make dir
+        try:
+            os.makedirs(save_dir_path)
+        except OSError as e:
+            if e.errno != errno.EEXIST:
+                raise
+
+    with open(os.path.join(save_dir_path, 'init_result.pkl'), 'wb') as f:
+        pickle.dump(initialization_result, f, protocol=pickle.HIGHEST_PROTOCOL)
+    with open(os.path.join(save_dir_path, 'pooled_train_result.pkl'), 'wb') as f:
+        pickle.dump(pooled_train_result, f, protocol=pickle.HIGHEST_PROTOCOL)
+    with open(os.path.join(save_dir_path, 'col_performance.pkl'), 'wb') as f:
+        pickle.dump(collaboration_performance_own, f, protocol=pickle.HIGHEST_PROTOCOL)
+
+    print("downbound_results:")
+    for i in range(N_parties):
+        print(collaboration_performance_own[i][-1])
 
     print("cosine_results:")
     for i in range(N_parties):

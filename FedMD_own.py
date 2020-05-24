@@ -108,7 +108,7 @@ class FedMD_own():
             # update logits
             logits = 0
             for d in self.collaborative_parties:
-                d["model_logits"].set_weights()
+                d["model_logits"].set_weights(d["model_weights"])
                 logits += d["model_logits"].predict(alignment_data["X"], verbose=0)
 
             logits /= self.N_parties
