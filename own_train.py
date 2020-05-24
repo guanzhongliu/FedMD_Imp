@@ -83,17 +83,17 @@ if __name__ == "__main__":
             parties.append(tmp)
 
     fedmd = FedMD_own(parties,
-                         public_dataset=public_dataset,
-                         private_data=private_data,
-                         total_private_data=total_private_data,
-                         private_test_data=private_test_data,
-                         N_rounds=N_rounds,
-                         N_alignment=N_alignment,
-                         N_logits_matching_round=N_logits_matching_round,
-                         logits_matching_batchsize=logits_matching_batchsize,
-                         N_private_training_round=N_private_training_round,
-                         private_training_batchsize=private_training_batchsize,
-                         random_parties=random_parties,interference=interference)
+                      public_dataset=public_dataset,
+                      private_data=private_data,
+                      total_private_data=total_private_data,
+                      private_test_data=private_test_data,
+                      N_rounds=N_rounds,
+                      N_alignment=N_alignment,
+                      N_logits_matching_round=N_logits_matching_round,
+                      logits_matching_batchsize=logits_matching_batchsize,
+                      N_private_training_round=N_private_training_round,
+                      private_training_batchsize=private_training_batchsize,
+                      interference=interference)
 
     initialization_result = fedmd.init_result
     pooled_train_result = fedmd.pooled_train_result
