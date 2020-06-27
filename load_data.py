@@ -74,7 +74,7 @@ def generate_partial_data(X, y, class_in_use="all", verbose=False):
 
 
 def generate_bal_private_data(X, y, N_parties=10, classes_in_use=range(11),
-                              N_samples_per_class=20, data_overlap=False):
+                              N_samples_per_class=20, data_overlap=False, inference=0):
     """
     Input:
     -- N_parties : int, number of collaboraters in this activity;

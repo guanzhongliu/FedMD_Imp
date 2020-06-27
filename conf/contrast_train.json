@@ -1,6 +1,6 @@
 {
     "N_parties": 10,
-    "N_samples_per_class": 1,
+    "N_samples_per_class": 3,
     "N_alignment": 5000,
     "private_classes": [10, 11, 12, 13, 14, 15],
     "public_classes": ['a','b','c','d','e','f'],
@@ -13,6 +13,6 @@
     "EMNIST_dir": "./dataset/emnist-letters.mat",
     "model_saved_dir": "./pretrained_from_MNIST/",
     "result_save_dir": "./FEMNIST_balanced/",
-    "Random_parties": 4,
-    "interference": 1
+    "Random_parties": 0,
+    "interference": "contrast"
 }

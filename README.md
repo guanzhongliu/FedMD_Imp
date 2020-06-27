@@ -5,31 +5,47 @@ Based on Tensorflow 2.0 and Python 3.7
 
 ## Introduction
 
-##### pretrain.py
+#### conf(Directory)
 
-Pretrain models with public data and their own private data
+Use various json files to specify the type of training to be performed.
 
-##### ac_train.py & FedMD.py
+#### dataset(Directory)
 
-The origin implementation of FedMD training
+Save Emnist dataset.
 
-##### random_train.py & Fed_random.py
+#### pretrain.py
 
-Select stochastic batches of models to calculate consensus
+Pretrain models with public data and their own private data.
 
-##### simu_train.py & Fed_simu.py
+#### model_train.py
 
-Use cosine similarity function to calculate consensus
+According to the corresponding json file to run federal learning.
 
-##### contrast_train.py
+#### FedMD.py
 
-Compare the performance of two methods
+Includes various federal learning models, such as FedMD and its variants.
+
+- ##### FedMD
+
+  The origin implementation of FedMD training.
+
+- ##### FedMD_random
+
+  Select stochastic batches of models to calculate consensus.
+
+- ##### FedMD_simu
+
+  Use cosine similarity function to calculate consensus.
+
+- ##### FedMD_own
+
+  Each client only learns on its private dataset.
 
 ## How to run
 
 Run the pre_train for instance
 
 ```shell
-python pretrain.py -conf conf/pre_train.json
+python pre_train.py -conf conf/pre_train.json
 ```
 
