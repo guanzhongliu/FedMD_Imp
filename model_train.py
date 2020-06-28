@@ -136,9 +136,48 @@ if __name__ == "__main__":
         for i in range(N_parties):
             print(collaboration_performance[i][-1])
 
-        else:
-            if interference == "actual":
-                fedmd = FedMD(parties,
+    else:
+        if interference == "actual":
+            fedmd = FedMD(parties,
+                          public_dataset=public_dataset,
+                          private_data=private_data,
+                          total_private_data=total_private_data,
+                          private_test_data=private_test_data,
+                          N_rounds=N_rounds,
+                          N_alignment=N_alignment,
+                          N_logits_matching_round=N_logits_matching_round,
+                          logits_matching_batchsize=logits_matching_batchsize,
+                          N_private_training_round=N_private_training_round,
+                          private_training_batchsize=private_training_batchsize, interference=interference)
+
+        elif interference == "simu":
+            fedmd = FedMD_simu(parties,
+                               public_dataset=public_dataset,
+                               private_data=private_data,
+                               total_private_data=total_private_data,
+                               private_test_data=private_test_data,
+                               N_rounds=N_rounds,
+                               N_alignment=N_alignment,
+                               N_logits_matching_round=N_logits_matching_round,
+                               logits_matching_batchsize=logits_matching_batchsize,
+                               N_private_training_round=N_private_training_round,
+                               private_training_batchsize=private_training_batchsize, interference=interference)
+
+        elif interference == "random":
+            fedmd = FedMD_random(parties,
+                                 public_dataset=public_dataset,
+                                 private_data=private_data,
+                                 total_private_data=total_private_data,
+                                 private_test_data=private_test_data,
+                                 N_rounds=N_rounds,
+                                 N_alignment=N_alignment,
+                                 N_logits_matching_round=N_logits_matching_round,
+                                 logits_matching_batchsize=logits_matching_batchsize,
+                                 N_private_training_round=N_private_training_round,
+                                 private_training_batchsize=private_training_batchsize,
+                                 random_parties=random_parties, interference=interference)
+        elif interference == "own":
+            fedmd = FedMD_own(parties,
                               public_dataset=public_dataset,
                               private_data=private_data,
                               total_private_data=total_private_data,
@@ -148,65 +187,26 @@ if __name__ == "__main__":
                               N_logits_matching_round=N_logits_matching_round,
                               logits_matching_batchsize=logits_matching_batchsize,
                               N_private_training_round=N_private_training_round,
-                              private_training_batchsize=private_training_batchsize, interference=interference)
+                              private_training_batchsize=private_training_batchsize,
+                              interference=interference)
 
-            elif interference == "simu":
-                fedmd = FedMD_simu(parties,
-                                   public_dataset=public_dataset,
-                                   private_data=private_data,
-                                   total_private_data=total_private_data,
-                                   private_test_data=private_test_data,
-                                   N_rounds=N_rounds,
-                                   N_alignment=N_alignment,
-                                   N_logits_matching_round=N_logits_matching_round,
-                                   logits_matching_batchsize=logits_matching_batchsize,
-                                   N_private_training_round=N_private_training_round,
-                                   private_training_batchsize=private_training_batchsize, interference=interference)
+        initialization_result = fedmd.init_result
+        pooled_train_result = fedmd.pooled_train_result
 
-            elif interference == "random":
-                fedmd = FedMD_random(parties,
-                                     public_dataset=public_dataset,
-                                     private_data=private_data,
-                                     total_private_data=total_private_data,
-                                     private_test_data=private_test_data,
-                                     N_rounds=N_rounds,
-                                     N_alignment=N_alignment,
-                                     N_logits_matching_round=N_logits_matching_round,
-                                     logits_matching_batchsize=logits_matching_batchsize,
-                                     N_private_training_round=N_private_training_round,
-                                     private_training_batchsize=private_training_batchsize,
-                                     random_parties=random_parties, interference=interference)
-            elif interference == "own":
-                fedmd = FedMD_own(parties,
-                                  public_dataset=public_dataset,
-                                  private_data=private_data,
-                                  total_private_data=total_private_data,
-                                  private_test_data=private_test_data,
-                                  N_rounds=N_rounds,
-                                  N_alignment=N_alignment,
-                                  N_logits_matching_round=N_logits_matching_round,
-                                  logits_matching_batchsize=logits_matching_batchsize,
-                                  N_private_training_round=N_private_training_round,
-                                  private_training_batchsize=private_training_batchsize,
-                                  interference=interference)
+        collaboration_performance = fedmd.collaborative_training()
 
-            initialization_result = fedmd.init_result
-            pooled_train_result = fedmd.pooled_train_result
+        if result_save_dir is not None:
+            save_dir_path = os.path.abspath(result_save_dir)
+            # make dir
+            try:
+                os.makedirs(save_dir_path)
+            except OSError as e:
+                if e.errno != errno.EEXIST:
+                    raise
 
-            collaboration_performance = fedmd.collaborative_training()
-
-            if result_save_dir is not None:
-                save_dir_path = os.path.abspath(result_save_dir)
-                # make dir
-                try:
-                    os.makedirs(save_dir_path)
-                except OSError as e:
-                    if e.errno != errno.EEXIST:
-                        raise
-
-            with open(os.path.join(save_dir_path, 'init_result.pkl'), 'wb') as f:
-                pickle.dump(initialization_result, f, protocol=pickle.HIGHEST_PROTOCOL)
-            with open(os.path.join(save_dir_path, 'pooled_train_result.pkl'), 'wb') as f:
-                pickle.dump(pooled_train_result, f, protocol=pickle.HIGHEST_PROTOCOL)
-            with open(os.path.join(save_dir_path, 'col_performance.pkl'), 'wb') as f:
-                pickle.dump(collaboration_performance, f, protocol=pickle.HIGHEST_PROTOCOL)
+        with open(os.path.join(save_dir_path, 'init_result.pkl'), 'wb') as f:
+            pickle.dump(initialization_result, f, protocol=pickle.HIGHEST_PROTOCOL)
+        with open(os.path.join(save_dir_path, 'pooled_train_result.pkl'), 'wb') as f:
+            pickle.dump(pooled_train_result, f, protocol=pickle.HIGHEST_PROTOCOL)
+        with open(os.path.join(save_dir_path, 'col_performance.pkl'), 'wb') as f:
+            pickle.dump(collaboration_performance, f, protocol=pickle.HIGHEST_PROTOCOL)
