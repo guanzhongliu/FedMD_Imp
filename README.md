@@ -19,7 +19,7 @@ Pretrain models with public data and their own private data.
 
 #### model_train.py
 
-According to the corresponding json file to run federal learning.
+According to the corresponding json file to run federated learning.
 
 #### FedMD.py
 
