@@ -84,9 +84,7 @@ def cnn_1layer_fc_model(n_classes, n1=1, dropout_rate=0.2, input_shape=(28, 28))
 
     y = Conv2D(filters=n1, kernel_size=(3, 3), strides=1, padding="same",
                activation=None)(y)
-    y = BatchNormalization()(y)
     y = Activation("relu")(y)
-    y = Dropout(dropout_rate)(y)
     # y = AveragePooling2D(pool_size = (2,2), strides = 2, padding = "valid")(y)
 
     y = Flatten()(y)
