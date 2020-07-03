@@ -5,7 +5,7 @@ import pickle
 import sys
 
 from tensorflow.keras.callbacks import EarlyStopping
-from Neural_Networks import cnn_2layer_fc_model, cnn_3layer_fc_model
+from Neural_Networks import cnn_2layer_fc_model, cnn_3layer_fc_model, cnn_1layer_fc_model
 from load_data import load_MNIST_data
 
 
@@ -24,8 +24,10 @@ def parseArg():
         return conf_file
 
 
-models = {"2_layer_CNN": cnn_2layer_fc_model,
+models = {"1_layer_CNN": cnn_1layer_fc_model,
+          "2_layer_CNN": cnn_2layer_fc_model,
           "3_layer_CNN": cnn_3layer_fc_model}
+
 
 # EarlyStopping允许设置的终止训练的条件即参数如下：
 #

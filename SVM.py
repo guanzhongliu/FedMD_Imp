@@ -8,7 +8,7 @@ import _pickle as pickle
 
 def getNum(dataset):
     num = dataset.size / 28 / 28
-    return  int(num)
+    return int(num)
 
 
 if __name__ == '__main__':
@@ -21,7 +21,7 @@ if __name__ == '__main__':
 
     x = np.reshape(x, (getNum(x), -1))
     test_x = np.reshape(test_x, (getNum(test_x), -1))
-    model = svm.NuSVC()
+    model = svm.LinearSVC(verbose=True, max_iter=3000)
     model.fit(x, y)
 
     z = model.predict(test_x)

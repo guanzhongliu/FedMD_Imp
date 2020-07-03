@@ -1,7 +1,7 @@
 {
     "n_classes": 16,
     "data_type": "MNIST",
-    "models": [{"model_type": "2_layer_CNN", "params": {"n1": 1, "n2": 2, "dropout_rate": 0.2}},
+    "models": [{"model_type": "1_layer_CNN", "params": {"n1": 1, "dropout_rate": 0.2}},
                {"model_type": "2_layer_CNN", "params": {"n1": 128, "n2": 384, "dropout_rate": 0.2}},
                {"model_type": "2_layer_CNN", "params": {"n1": 128, 'n2': 512, "dropout_rate": 0.2}},
                {"model_type": "2_layer_CNN", "params": {"n1": 256, "n2": 256, "dropout_rate": 0.3}},
