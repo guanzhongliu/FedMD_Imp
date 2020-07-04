@@ -136,6 +136,10 @@ if __name__ == "__main__":
         for i in range(N_parties):
             print(collaboration_performance[i][-1])
 
+        print("cosine_weights:")
+        for i in fed_sim.cosine_weights:
+            print(i)
+
     else:
         if interference == "actual":
             fedmd = FedMD(parties,

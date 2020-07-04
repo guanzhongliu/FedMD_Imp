@@ -345,6 +345,7 @@ class FedMD_simu():
         self.collaborative_parties = []
         self.init_result = []
         self.interference = interference
+        self.cosine_weights = []
 
         print("start model initialization: ")
         for i in range(self.N_parties):
@@ -439,6 +440,8 @@ class FedMD_simu():
             x = np.array(cosine_simu)
 
             x = np.exp(x) / np.sum(np.exp(x), axis=0)
+
+            self.cosine_weights.append(x)
 
             logits = 0
             for i in range(self.N_parties):
