@@ -87,6 +87,20 @@ if __name__ == "__main__":
         in_model = 0
 
     if train_type == "contrast":
+        fed_base = FedMD(parties,
+                        public_dataset=public_dataset,
+                        private_data=private_data,
+                        total_private_data=total_private_data,
+                        private_test_data=private_test_data,
+                        N_rounds=N_rounds,
+                        N_alignment=N_alignment,
+                        N_logits_matching_round=N_logits_matching_round,
+                        logits_matching_batchsize=logits_matching_batchsize,
+                        N_private_training_round=N_private_training_round,
+                        private_training_batchsize=private_training_batchsize, train_type=train_type)
+
+        collaboration_performance_base = fed_base.collaborative_training_normal()
+
         fed_sim = FedMD(parties,
                         public_dataset=public_dataset,
                         private_data=private_data,
@@ -137,6 +151,10 @@ if __name__ == "__main__":
             print(collaboration_performance_own[i][-1])
 
         print("inference model: {}".format(in_model))
+
+        print("base_results:")
+        for i in range(N_parties):
+            print(collaboration_performance_base[i][-1])
 
         print("normal_results:")
         for i in range(N_parties):
