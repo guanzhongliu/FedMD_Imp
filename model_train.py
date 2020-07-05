@@ -115,7 +115,7 @@ if __name__ == "__main__":
                       private_training_batchsize=private_training_batchsize, train_type=train_type,
                       interference=interference, in_model=in_model, random_logits=save_rand)
 
-        collaboration_performance = fedmd.collaborative_training_normal()
+        collaboration_performance, save_rand = fedmd.collaborative_training_normal()
 
         fedmd_own = FedMD(parties,
                           public_dataset=public_dataset,
