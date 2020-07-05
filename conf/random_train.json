@@ -14,5 +14,6 @@
     "model_saved_dir": "./pretrained_from_MNIST/",
     "result_save_dir": "./FEMNIST_balanced/",
     "Random_parties": 4,
-    "interference": "random"
+    "train_type": "random",
+    "interference": False
 }

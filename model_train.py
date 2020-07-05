@@ -3,7 +3,7 @@ import errno
 import os
 import pickle
 import sys
-
+import numpy as np
 from tensorflow.keras.models import load_model
 from FedMD import FedMD, FedMD_own, FedMD_simu, FedMD_random
 from load_data import load_MNIST_data, load_EMNIST_data, generate_bal_private_data, \
@@ -35,7 +35,6 @@ if __name__ == "__main__":
         N_parties = conf_dict["N_parties"]
         private_classes = conf_dict["private_classes"]
         N_samples_per_class = conf_dict["N_samples_per_class"]
-
         N_rounds = conf_dict["N_rounds"]
         N_alignment = conf_dict["N_alignment"]
         N_private_training_round = conf_dict["N_private_training_round"]
@@ -45,6 +44,7 @@ if __name__ == "__main__":
         model_saved_dir = conf_dict["model_saved_dir"]
         random_parties = conf_dict["Random_parties"]
         result_save_dir = conf_dict["result_save_dir"]
+        train_type = conf_dict["train_type"]
         interference = conf_dict["interference"]
 
     del conf_dict, conf_file
@@ -81,7 +81,12 @@ if __name__ == "__main__":
             tmp = load_model(os.path.join(dpath, name))
             parties.append(tmp)
 
-    if interference == "contrast":
+    if interference is True:
+        in_model = np.random.randint(0, high=10)
+    else:
+        in_model = 0
+
+    if train_type == "contrast":
         fed_sim = FedMD_simu(parties,
                              public_dataset=public_dataset,
                              private_data=private_data,
@@ -92,7 +97,8 @@ if __name__ == "__main__":
                              N_logits_matching_round=N_logits_matching_round,
                              logits_matching_batchsize=logits_matching_batchsize,
                              N_private_training_round=N_private_training_round,
-                             private_training_batchsize=private_training_batchsize, interference=interference)
+                             private_training_batchsize=private_training_batchsize, train_type=train_type,
+                             interference=interference, in_model=in_model)
 
         collaboration_performance_sim = fed_sim.collaborative_training()
 
@@ -106,7 +112,8 @@ if __name__ == "__main__":
                       N_logits_matching_round=N_logits_matching_round,
                       logits_matching_batchsize=logits_matching_batchsize,
                       N_private_training_round=N_private_training_round,
-                      private_training_batchsize=private_training_batchsize, interference=interference)
+                      private_training_batchsize=private_training_batchsize, train_type=train_type,
+                      interference=interference, in_model=in_model)
 
         collaboration_performance = fedmd.collaborative_training()
 
@@ -120,28 +127,32 @@ if __name__ == "__main__":
                               N_logits_matching_round=N_logits_matching_round,
                               logits_matching_batchsize=logits_matching_batchsize,
                               N_private_training_round=N_private_training_round,
-                              private_training_batchsize=private_training_batchsize, interference=interference)
+                              private_training_batchsize=private_training_batchsize, train_type=train_type,
+                              interference=interference, in_model=in_model)
 
         collaboration_performance_own = fedmd_own.collaborative_training()
+
 
         print("downbound_results:")
         for i in range(N_parties):
             print(collaboration_performance_own[i][-1])
 
-        print("cosine_results:")
-        for i in range(N_parties):
-            print(collaboration_performance_sim[i][-1])
+        print("inference model: {}".format(in_model))
 
         print("normal_results:")
         for i in range(N_parties):
             print(collaboration_performance[i][-1])
+
+        print("cosine_results:")
+        for i in range(N_parties):
+            print(collaboration_performance_sim[i][-1])
 
         print("cosine_weights:")
         for i in fed_sim.cosine_weights:
             print(i)
 
     else:
-        if interference == "actual":
+        if train_type == "actual":
             fedmd = FedMD(parties,
                           public_dataset=public_dataset,
                           private_data=private_data,
@@ -152,9 +163,9 @@ if __name__ == "__main__":
                           N_logits_matching_round=N_logits_matching_round,
                           logits_matching_batchsize=logits_matching_batchsize,
                           N_private_training_round=N_private_training_round,
-                          private_training_batchsize=private_training_batchsize, interference=interference)
+                          private_training_batchsize=private_training_batchsize, train_type=train_type)
 
-        elif interference == "simu":
+        elif train_type == "simu":
             fedmd = FedMD_simu(parties,
                                public_dataset=public_dataset,
                                private_data=private_data,
@@ -165,9 +176,9 @@ if __name__ == "__main__":
                                N_logits_matching_round=N_logits_matching_round,
                                logits_matching_batchsize=logits_matching_batchsize,
                                N_private_training_round=N_private_training_round,
-                               private_training_batchsize=private_training_batchsize, interference=interference)
+                               private_training_batchsize=private_training_batchsize, train_type=train_type)
 
-        elif interference == "random":
+        elif train_type == "random":
             fedmd = FedMD_random(parties,
                                  public_dataset=public_dataset,
                                  private_data=private_data,
@@ -179,8 +190,8 @@ if __name__ == "__main__":
                                  logits_matching_batchsize=logits_matching_batchsize,
                                  N_private_training_round=N_private_training_round,
                                  private_training_batchsize=private_training_batchsize,
-                                 random_parties=random_parties, interference=interference)
-        elif interference == "own":
+                                 random_parties=random_parties, train_type=train_type)
+        elif train_type == "own":
             fedmd = FedMD_own(parties,
                               public_dataset=public_dataset,
                               private_data=private_data,
@@ -192,7 +203,7 @@ if __name__ == "__main__":
                               logits_matching_batchsize=logits_matching_batchsize,
                               N_private_training_round=N_private_training_round,
                               private_training_batchsize=private_training_batchsize,
-                              interference=interference)
+                              train_type=train_type)
 
         initialization_result = fedmd.init_result
         pooled_train_result = fedmd.pooled_train_result
