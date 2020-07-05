@@ -34,6 +34,7 @@ class FedMD():
         self.in_model = in_model
         self.interference = interference
         self.random_logits = random_logits
+        self.cosine_weights = []
 
         print("start model initialization: ")
         for i in range(self.N_parties):
@@ -100,6 +101,7 @@ class FedMD():
         # start collaborating training
         collaboration_performance = {i: [] for i in range(self.N_parties)}
         r = 0
+        save_rand = []
         while True:
             # At beginning of each round, generate new alignment dataset
             alignment_data = generate_alignment_data(self.public_dataset["X"],
@@ -113,7 +115,6 @@ class FedMD():
             logits = 0
 
             save_logits = []
-            save_rand = []
             for nn in range(self.N_parties):
                 d = self.collaborative_parties[nn]
                 d["model_logits"].set_weights(d["model_weights"])
@@ -259,6 +260,7 @@ class FedMD():
         # start collaborating training
         collaboration_performance = {i: [] for i in range(self.N_parties)}
         r = 0
+        save_rand = []
         while True:
             # At beginning of each round, generate new alignment dataset
             alignment_data = generate_alignment_data(self.public_dataset["X"],
@@ -271,7 +273,6 @@ class FedMD():
             # update logits
             logits = 0
             save_logits = []
-            save_rand = []
             for nn in range(self.N_parties):
                 d = self.collaborative_parties[nn]
                 d["model_logits"].set_weights(d["model_weights"])
