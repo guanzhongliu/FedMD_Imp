@@ -117,7 +117,8 @@ class FedMD():
                 save_logits.append(d["model_logits"].predict(alignment_data["X"], verbose=0))
 
                 if self.interference is True and nn == self.in_model:
-                    temp = np.random.rand(save_logits[nn].shape)
+                    shape = save_logits[nn].shape
+                    temp = np.random.rand(shape[0], shape[1])
                     num = np.sum(temp)
                     save_logits[nn] = temp / num
 
@@ -432,7 +433,8 @@ class FedMD_simu():
                 d["model_logits"].set_weights(d["model_weights"])
                 save_logits.append(d["model_logits"].predict(alignment_data["X"], verbose=0))
                 if self.interference is True and nn == self.in_model:
-                    temp = np.random.rand(save_logits[nn].shape)
+                    shape = save_logits[nn].shape
+                    temp = np.random.rand(shape[0], shape[1])
                     num = np.sum(temp)
                     save_logits[nn] = temp / num
 
