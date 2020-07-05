@@ -273,6 +273,17 @@ class FedMD_own():
                                                      self.N_alignment)
 
             print("round ", r)
+            print("update logits ... ")
+            # update logits
+            logits = 0
+            ans = []
+            for d in self.collaborative_parties:
+                d["model_logits"].set_weights(d["model_weights"])
+                temp = d["model_logits"].predict(alignment_data["X"], verbose=0)
+                logits += temp
+                ans.append(temp)
+
+            logits /= self.N_parties
 
             # test performance
             print("test performance ... ")
