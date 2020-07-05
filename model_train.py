@@ -5,7 +5,7 @@ import pickle
 import sys
 import numpy as np
 from tensorflow.keras.models import load_model
-from FedMD import FedMD, FedMD_own, FedMD_simu, FedMD_random
+from FedMD import FedMD, FedMD_random
 from load_data import load_MNIST_data, load_EMNIST_data, generate_bal_private_data, \
     generate_partial_data
 
@@ -87,20 +87,20 @@ if __name__ == "__main__":
         in_model = 0
 
     if train_type == "contrast":
-        fed_sim = FedMD_simu(parties,
-                             public_dataset=public_dataset,
-                             private_data=private_data,
-                             total_private_data=total_private_data,
-                             private_test_data=private_test_data,
-                             N_rounds=N_rounds,
-                             N_alignment=N_alignment,
-                             N_logits_matching_round=N_logits_matching_round,
-                             logits_matching_batchsize=logits_matching_batchsize,
-                             N_private_training_round=N_private_training_round,
-                             private_training_batchsize=private_training_batchsize, train_type=train_type,
-                             interference=interference, in_model=in_model)
+        fed_sim = FedMD(parties,
+                        public_dataset=public_dataset,
+                        private_data=private_data,
+                        total_private_data=total_private_data,
+                        private_test_data=private_test_data,
+                        N_rounds=N_rounds,
+                        N_alignment=N_alignment,
+                        N_logits_matching_round=N_logits_matching_round,
+                        logits_matching_batchsize=logits_matching_batchsize,
+                        N_private_training_round=N_private_training_round,
+                        private_training_batchsize=private_training_batchsize, train_type=train_type,
+                        interference=interference, in_model=in_model)
 
-        collaboration_performance_sim = fed_sim.collaborative_training()
+        collaboration_performance_sim, save_rand = fed_sim.collaborative_training_simu()
 
         fedmd = FedMD(parties,
                       public_dataset=public_dataset,
@@ -113,25 +113,24 @@ if __name__ == "__main__":
                       logits_matching_batchsize=logits_matching_batchsize,
                       N_private_training_round=N_private_training_round,
                       private_training_batchsize=private_training_batchsize, train_type=train_type,
-                      interference=interference, in_model=in_model)
+                      interference=interference, in_model=in_model, random_logits=save_rand)
 
-        collaboration_performance = fedmd.collaborative_training()
+        collaboration_performance = fedmd.collaborative_training_normal()
 
-        fedmd_own = FedMD_own(parties,
-                              public_dataset=public_dataset,
-                              private_data=private_data,
-                              total_private_data=total_private_data,
-                              private_test_data=private_test_data,
-                              N_rounds=N_rounds,
-                              N_alignment=N_alignment,
-                              N_logits_matching_round=N_logits_matching_round,
-                              logits_matching_batchsize=logits_matching_batchsize,
-                              N_private_training_round=N_private_training_round,
-                              private_training_batchsize=private_training_batchsize, train_type=train_type,
-                              interference=interference, in_model=in_model)
+        fedmd_own = FedMD(parties,
+                          public_dataset=public_dataset,
+                          private_data=private_data,
+                          total_private_data=total_private_data,
+                          private_test_data=private_test_data,
+                          N_rounds=N_rounds,
+                          N_alignment=N_alignment,
+                          N_logits_matching_round=N_logits_matching_round,
+                          logits_matching_batchsize=logits_matching_batchsize,
+                          N_private_training_round=N_private_training_round,
+                          private_training_batchsize=private_training_batchsize, train_type=train_type,
+                          interference=interference, in_model=in_model)
 
-        collaboration_performance_own = fedmd_own.collaborative_training()
-
+        collaboration_performance_own = fedmd_own.collaborative_training_own()
 
         print("downbound_results:")
         for i in range(N_parties):
@@ -164,19 +163,21 @@ if __name__ == "__main__":
                           logits_matching_batchsize=logits_matching_batchsize,
                           N_private_training_round=N_private_training_round,
                           private_training_batchsize=private_training_batchsize, train_type=train_type)
+            collaboration_performance = fedmd.collaborative_training_normal()
 
         elif train_type == "simu":
-            fedmd = FedMD_simu(parties,
-                               public_dataset=public_dataset,
-                               private_data=private_data,
-                               total_private_data=total_private_data,
-                               private_test_data=private_test_data,
-                               N_rounds=N_rounds,
-                               N_alignment=N_alignment,
-                               N_logits_matching_round=N_logits_matching_round,
-                               logits_matching_batchsize=logits_matching_batchsize,
-                               N_private_training_round=N_private_training_round,
-                               private_training_batchsize=private_training_batchsize, train_type=train_type)
+            fedmd = FedMD(parties,
+                          public_dataset=public_dataset,
+                          private_data=private_data,
+                          total_private_data=total_private_data,
+                          private_test_data=private_test_data,
+                          N_rounds=N_rounds,
+                          N_alignment=N_alignment,
+                          N_logits_matching_round=N_logits_matching_round,
+                          logits_matching_batchsize=logits_matching_batchsize,
+                          N_private_training_round=N_private_training_round,
+                          private_training_batchsize=private_training_batchsize, train_type=train_type)
+            collaboration_performance = fedmd.collaborative_training_simu()
 
         elif train_type == "random":
             fedmd = FedMD_random(parties,
@@ -191,24 +192,25 @@ if __name__ == "__main__":
                                  N_private_training_round=N_private_training_round,
                                  private_training_batchsize=private_training_batchsize,
                                  random_parties=random_parties, train_type=train_type)
+            collaboration_performance = fedmd.collaborative_training()
+
         elif train_type == "own":
-            fedmd = FedMD_own(parties,
-                              public_dataset=public_dataset,
-                              private_data=private_data,
-                              total_private_data=total_private_data,
-                              private_test_data=private_test_data,
-                              N_rounds=N_rounds,
-                              N_alignment=N_alignment,
-                              N_logits_matching_round=N_logits_matching_round,
-                              logits_matching_batchsize=logits_matching_batchsize,
-                              N_private_training_round=N_private_training_round,
-                              private_training_batchsize=private_training_batchsize,
-                              train_type=train_type)
+            fedmd = FedMD(parties,
+                          public_dataset=public_dataset,
+                          private_data=private_data,
+                          total_private_data=total_private_data,
+                          private_test_data=private_test_data,
+                          N_rounds=N_rounds,
+                          N_alignment=N_alignment,
+                          N_logits_matching_round=N_logits_matching_round,
+                          logits_matching_batchsize=logits_matching_batchsize,
+                          N_private_training_round=N_private_training_round,
+                          private_training_batchsize=private_training_batchsize,
+                          train_type=train_type)
+            collaboration_performance = fedmd.collaborative_training_own()
 
         initialization_result = fedmd.init_result
         pooled_train_result = fedmd.pooled_train_result
-
-        collaboration_performance = fedmd.collaborative_training()
 
         if result_save_dir is not None:
             save_dir_path = os.path.abspath(result_save_dir)
